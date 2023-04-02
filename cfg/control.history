@@ -17,3 +17,48 @@ add storage Neo4j database=spade.graph
 add analyzer CommandLine
 list all
 exit
+list all
+add storage Neo4j database=spade.graph
+add analyzer CommandLine
+list all
+add storage Neo4j database=spade.graph
+exit
+list all
+exit
+list all
+add storage Neo4j database=spade.graph
+exit
+list all
+add storage Neo4j database=spade.graph
+list all
+add reporter Audit
+exit
+list all
+exit
+list all
+add reporter Audit
+exit
+list all
+add reporter Audit
+exit
+list all
+add reporter Audit
+exit
+list all
+add reporter Audit
+exit
+list all
+add reporter Audit
+exit
+list all
+add reporter Audit
+exit
+list all
+add reporter Audit
+exit
+list all
+add reporter Audit
+exit
+list all
+add reporter Audit
+exit
