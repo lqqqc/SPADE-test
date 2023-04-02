@@ -1,0 +1,17 @@
+.idea
+bin
+build
+cfg
+db
+lib
+log
+test
+tmp
+vagrant
+.travis.yml
+config.status
+config.log
+Makefile
+spade.host
+SPADE-test.iml
+spade.pid
