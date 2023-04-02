@@ -1,14 +1,9 @@
 .idea
-bin
 build
-cfg
 db
-lib
+lib/neo4j-community-4.1.1
 log
-test
 tmp
-vagrant
-.travis.yml
 config.status
 config.log
 Makefile

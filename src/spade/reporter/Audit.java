@@ -1010,6 +1010,7 @@ public class Audit extends AbstractReporter {
 				break;
 			case RENAME:
 			case RENAMEAT:
+			case RENAMEAT2:
 				handleRename(eventData, syscall);
 				break;
 			case SETUID:
@@ -1977,7 +1978,7 @@ public class Audit extends AbstractReporter {
 	}
 
 	/**
-	 * Creates OPM vertices and edges for link, symlink, linkat, symlinkat, rename, renameat syscalls.
+	 * Creates OPM vertices and edges for link, symlink, linkat, symlinkat, rename, renameat, renameat2 syscalls.
 	 * 
 	 * Steps:
 	 * 1) Gets the valid source artifact type (can be either file, named pipe, unix socket)

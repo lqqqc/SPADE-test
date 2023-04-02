@@ -1,0 +1,19 @@
+list all
+exit
+add storage Neo4j database=spade.graph
+exit
+add reporter Audit
+exit
+list all
+exit
+list all
+add analyzer CommandLine
+list all
+exit
+list all
+exit
+list all
+add storage Neo4j database=spade.graph
+add analyzer CommandLine
+list all
+exit

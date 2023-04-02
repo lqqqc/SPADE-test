@@ -40,7 +40,7 @@ public enum SYSCALL{
 	READ, READV, PREAD, PREADV, WRITE, WRITEV, PWRITE, PWRITEV, 
 	SYMLINK, SYMLINKAT, LINK, LINKAT, 
 	UNLINK, UNLINKAT,		
-	RENAME, RENAMEAT,
+	RENAME, RENAMEAT, RENAMEAT2,
 	UNKNOWN, // Used for edges between processes where system call wasn't known (not an actual system call)
 	DUP, DUP2, DUP3, 
 	EXIT, EXIT_GROUP, 
