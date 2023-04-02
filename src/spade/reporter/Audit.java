@@ -1880,7 +1880,7 @@ public class Audit extends AbstractReporter {
 		if(syscall == SYSCALL.RENAME){
 			oldArtifactIdentifier = resolvePath(oldPathRecord, eventData, syscall);
 			newArtifactIdentifier = resolvePath(newPathRecord, eventData, syscall);
-		}else if(syscall == SYSCALL.RENAMEAT){
+		}else if(syscall == SYSCALL.RENAMEAT || syscall == SYSCALL.RENAMEAT2){
 			oldArtifactIdentifier = resolvePath_At(oldPathRecord, AuditEventReader.ARG0, eventData, syscall);
 			newArtifactIdentifier = resolvePath_At(newPathRecord, AuditEventReader.ARG2, eventData, syscall);     	
 		}else{
