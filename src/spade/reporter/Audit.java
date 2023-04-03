@@ -1284,7 +1284,8 @@ public class Audit extends AbstractReporter {
 		// - CWD
 		// - EOE
 
-		if(auditConfiguration.isControl()){
+		// 需要spade.reporter.Audit.config中的control为true
+//		if(auditConfiguration.isControl()){
 			String time = eventData.get(AuditEventReader.TIME);
 			String eventId = eventData.get(AuditEventReader.EVENT_ID);
 			
@@ -1316,7 +1317,7 @@ public class Audit extends AbstractReporter {
 				WasGeneratedBy deletedEdge = new WasGeneratedBy(artifact, process);
 				putEdge(deletedEdge, getOperation(syscall), time, eventId, AUDIT_SYSCALL_SOURCE);
 			}
-		}
+//		}
 	}
 
 	private FileDescriptor addUnknownFd(String pid, String fd){

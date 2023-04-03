@@ -71,6 +71,7 @@ public class AuditControlManager{
 			
 			final String archField = "-F arch=b64";
 			final String userField;
+			// spade.reporter.Audit.config中的user字段
 			if(userMode == null){
 				throw new Exception("NULL user mode");
 			}else{
@@ -83,8 +84,13 @@ public class AuditControlManager{
 			
 			final String pidAndPpidFields = (constructSubRuleForFields("pid", "!=", pidsToIgnore) + " "
 					+ constructSubRuleForFields("ppid", "!=", ppidsToIgnore)).trim();
-		
+//			final String pidFields = (constructSubRuleForFields("pid", "!=", pidsToIgnore)).trim();
+//			final String ppidFields = (constructSubRuleForFields("ppid", "!=", ppidsToIgnore)).trim();
+//			final String pidAndPpidFields = (pidFields + ppidFields).trim();
+
+			// 如果spade.reporter.Audit.config中 syscall=all
 			if(systemCallRuleType == SystemCallRuleType.ALL){
+				// spade.reporter.Audit.config 中的 localEndpoints
 				if(kernelModulesAdded){
 					final String neverSystemCallRule = 
 							"exit,never " 
@@ -110,12 +116,15 @@ public class AuditControlManager{
                 		+ "-F success=1 "
                 		+ pidAndPpidFields).trim();
                 rules.add(allSystemCallRule);
+
+			// 如果spade.reporter.Audit.config中 syscall=default
 			}else if(systemCallRuleType == SystemCallRuleType.DEFAULT){
 				final List<String> systemCallsWithSuccess = new ArrayList<String>();
 				if(fileIO){
 					systemCallsWithSuccess.addAll(Arrays.asList("read", "readv", "pread", "preadv",
 							"write", "writev", "pwrite", "pwritev", "lseek"));
 				}
+				// spade.reporter.Audit.config中localEndpoints字段
 				if(!kernelModulesAdded){
 					if(netIO){
 						systemCallsWithSuccess.addAll(Arrays.asList("sendmsg", "sendto", "recvmsg", "recvfrom"));
@@ -140,10 +149,10 @@ public class AuditControlManager{
 				systemCallsWithSuccess.addAll(Arrays.asList(
 						"unlink", "unlinkat", "link", "linkat", "symlink", "symlinkat",
 						"clone", "fork", "vfork", "execve",
-						"open", "openat", "creat", "close", "mknod", "mknodat",
-						"dup", "dup2", "dup3", "fcntl", "rename", "renameat",
+						"open", "openat", "creat", "mknod", "mknodat",
+						"dup", "dup2", "dup3", "fcntl", "rename", "renameat", "renameat2",
 						"setuid", "setreuid", "setresuid", "setgid", "setregid", "setresgid",
-						"chmod", "fchmod", "fchmodat", "truncate", "ftruncate",
+						"chmod", "fchmod", "fchmodat",
 						"pipe", "pipe2", "tee", "splice", "vmsplice", "socketpair",
 						"init_module", "finit_module", "ptrace"
 						));
@@ -170,19 +179,21 @@ public class AuditControlManager{
 						+ "-F success=1 "
 						+ pidAndPpidFields).trim();
 				rules.add(withSuccessSystemCallRule);
+
 				
 				final List<String> systemCallsWithoutSuccess = new ArrayList<String>();
 				systemCallsWithoutSuccess.addAll(Arrays.asList("exit", "exit_group"));
 				if(!kernelModulesAdded){
 					systemCallsWithoutSuccess.addAll(Arrays.asList("connect", "kill"));	
 				}
-				final String withoutSuccessSystemCallRule = 
+				final String withoutSuccessSystemCallRule =
 						("exit,always "
-						+ archField + " "
-						+ userField + " "
-						+ constructSubRuleForSystemCalls(systemCallsWithoutSuccess.toArray(new String[]{})) + " "
-						+ pidAndPpidFields).trim();
+								+ archField + " "
+								+ userField + " "
+								+ constructSubRuleForSystemCalls(systemCallsWithoutSuccess.toArray(new String[]{})) + " "
+								+ pidAndPpidFields).trim();
 				rules.add(withoutSuccessSystemCallRule);
+
 			}else{
 				throw new Exception("Unexpected system call rule type: '" + systemCallRuleType + "'");
 			}

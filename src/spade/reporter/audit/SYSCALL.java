@@ -135,6 +135,7 @@ public enum SYSCALL{
 			case 47:	return RECVMSG;
 			case 82:	return RENAME;
 			case 264:	return RENAMEAT;
+			case 316:	return RENAMEAT2;
 			case 46:	return SENDMSG;
 			case 44:	return SENDTO;
 			case 123:	return SETFSGID;
