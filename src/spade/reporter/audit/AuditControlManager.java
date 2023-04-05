@@ -97,33 +97,41 @@ public class AuditControlManager{
 
 		}else{
 			// 如果spade.reporter.Audit.config中 syscall=all
-			if(systemCallRuleType == SystemCallRuleType.ALL){
-				// spade.reporter.Audit.config 中的 localEndpoints
-				if(kernelModulesAdded){
-					final String neverSystemCallRule = 
-							"exit,never " 
-							+ archField + " "
-							+ constructSubRuleForSystemCalls("kill", "socket", "bind", "accept", "accept4", "connect", 
-									"sendmsg", "sendto", "sendmmsg", "recvmsg", "recvfrom", "recvmmsg");
-					rules.add(neverSystemCallRule);
-				}
-				
-				final String nonSuccessSystemCallRule = 
-						("exit,always " 
-						+ archField + " "
-						+ constructSubRuleForSystemCalls("exit", "exit_group", "kill", "connect") + " "
-						+ userField + " "
-						+ pidAndPpidFields).trim();
-				rules.add(nonSuccessSystemCallRule);
-				
-                final String allSystemCallRule = 
-                		("exit,always " 
-                		+ archField + " "
-                		+ constructSubRuleForSystemCalls("all") + " "
-                		+ userField + " "
-                		+ "-F success=1 "
-                		+ pidAndPpidFields).trim();
-                rules.add(allSystemCallRule);
+			if(systemCallRuleType == SystemCallRuleType.ALL) {
+//				// spade.reporter.Audit.config 中的 localEndpoints
+//				if(kernelModulesAdded){
+//					final String neverSystemCallRule =
+//							"exit,never "
+//							+ archField + " "
+//							+ constructSubRuleForSystemCalls("kill", "socket", "bind", "accept", "accept4", "connect",
+//									"sendmsg", "sendto", "sendmmsg", "recvmsg", "recvfrom", "recvmmsg");
+//					rules.add(neverSystemCallRule);
+//				}
+//
+//				final String nonSuccessSystemCallRule =
+//						("exit,always "
+//						+ archField + " "
+//						+ constructSubRuleForSystemCalls("exit", "exit_group", "kill", "connect") + " "
+//						+ userField + " "
+//						+ pidAndPpidFields).trim();
+//				rules.add(nonSuccessSystemCallRule);
+//
+//                final String allSystemCallRule =
+//                		("exit,always "
+//                		+ archField + " "
+//                		+ constructSubRuleForSystemCalls("all") + " "
+//                		+ userField + " "
+//                		+ "-F success=1 "
+//                		+ pidAndPpidFields).trim();
+//                rules.add(allSystemCallRule);
+
+				final String forkVforkCloneExecveRule =
+						("exit,always "
+								+ archField + " "
+								+ constructSubRuleForSystemCalls("fork", "vfork", "clone", "execve") + " "
+								+ userField + " "
+								+ pidAndPpidFields).trim();
+				rules.add(forkVforkCloneExecveRule);
 
 			// 如果spade.reporter.Audit.config中 syscall=default
 			}else if(systemCallRuleType == SystemCallRuleType.DEFAULT){
