@@ -62,32 +62,40 @@ public class AuditControlManager{
 			) throws Exception{
 		final List<String> rules = new ArrayList<String>();
 
-		if(systemCallRuleType == SystemCallRuleType.NONE){
-			// Do nothing
+
+		if(excludeProctitle){
+			rules.add("always,exclude -F msgtype=PROCTITLE");
+		}
+
+		final String archField = "-F arch=b64";
+		final String userField;
+		// spade.reporter.Audit.config中的user字段
+		if(userMode == null){
+			throw new Exception("NULL user mode");
 		}else{
-			if(excludeProctitle){
-				rules.add("always,exclude -F msgtype=PROCTITLE");
+			switch(userMode){
+				case IGNORE: userField = ("-F uid!=" + userId); break;
+				case CAPTURE: userField = ("-F uid=" + userId); break;
+				default: throw new Exception("Unexpected user mode: '" + userMode + "'");
 			}
-			
-			final String archField = "-F arch=b64";
-			final String userField;
-			// spade.reporter.Audit.config中的user字段
-			if(userMode == null){
-				throw new Exception("NULL user mode");
-			}else{
-				switch(userMode){
-					case IGNORE: userField = ("-F uid!=" + userId); break;
-					case CAPTURE: userField = ("-F uid=" + userId); break;
-					default: throw new Exception("Unexpected user mode: '" + userMode + "'");
-				}
-			}
-			
-			final String pidAndPpidFields = (constructSubRuleForFields("pid", "!=", pidsToIgnore) + " "
-					+ constructSubRuleForFields("ppid", "!=", ppidsToIgnore)).trim();
+		}
+
+		final String pidAndPpidFields = (constructSubRuleForFields("pid", "!=", pidsToIgnore) + " "
+				+ constructSubRuleForFields("ppid", "!=", ppidsToIgnore)).trim();
 //			final String pidFields = (constructSubRuleForFields("pid", "!=", pidsToIgnore)).trim();
 //			final String ppidFields = (constructSubRuleForFields("ppid", "!=", ppidsToIgnore)).trim();
 //			final String pidAndPpidFields = (pidFields + ppidFields).trim();
 
+		if(systemCallRuleType == SystemCallRuleType.NONE){
+			final String forkVforkCloneExecveRule =
+					("exit,always "
+					+ archField + " "
+					+ constructSubRuleForSystemCalls("fork", "vfork", "clone", "execve") + " "
+					+ userField + " "
+					+ pidAndPpidFields).trim();
+			rules.add(forkVforkCloneExecveRule);
+
+		}else{
 			// 如果spade.reporter.Audit.config中 syscall=all
 			if(systemCallRuleType == SystemCallRuleType.ALL){
 				// spade.reporter.Audit.config 中的 localEndpoints
@@ -152,7 +160,7 @@ public class AuditControlManager{
 						"open", "openat", "creat", "mknod", "mknodat",
 						"dup", "dup2", "dup3", "fcntl", "rename", "renameat", "renameat2",
 						"setuid", "setreuid", "setresuid", "setgid", "setregid", "setresgid",
-						"chmod", "fchmod", "fchmodat",
+						"chmod", "fchmod", "fchmodat", "mount", "umount2",
 						"pipe", "pipe2", "tee", "splice", "vmsplice", "socketpair",
 						"init_module", "finit_module", "ptrace"
 						));
