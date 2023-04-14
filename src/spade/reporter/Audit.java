@@ -1480,6 +1480,7 @@ public class Audit extends AbstractReporter {
 		String eventId = eventData.get(AuditEventReader.EVENT_ID);
 		String pid = eventData.get(AuditEventReader.PID);
 
+		// 返回的是子进程
 		Process process = processManager.handleExecve(eventData, syscall);
 
 		List<PathRecord> loadPathRecords = PathRecord.getPathsWithNametype(eventData, AuditEventReader.NAMETYPE_NORMAL);

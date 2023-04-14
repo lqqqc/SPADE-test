@@ -459,7 +459,8 @@ public abstract class ProcessManager extends ProcessStateManager{
 		String time = eventData.get(AuditEventReader.TIME);
 		String eventId = eventData.get(AuditEventReader.EVENT_ID);
 		final String childExe = eventData.get(AuditEventReader.EXE);
-		
+
+		// 获取（execve）父进程
 		Process parentProcessVertex = handleProcessFromSyscall(eventData);
 
 		// look at code

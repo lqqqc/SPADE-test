@@ -125,13 +125,18 @@ public class AuditControlManager{
 //                		+ pidAndPpidFields).trim();
 //                rules.add(allSystemCallRule);
 
-				final String forkVforkCloneExecveRule =
+//				final String forkVforkCloneExecveUnshareRule =
+//						("exit,always "
+//								+ archField + " "
+//								+ constructSubRuleForSystemCalls("fork", "vfork", "clone", "execve") + " "
+//								+ userField + " "
+//								+ pidAndPpidFields).trim();
+				final String forkVforkCloneExecveUnshareRule =
 						("exit,always "
 								+ archField + " "
 								+ constructSubRuleForSystemCalls("fork", "vfork", "clone", "execve") + " "
-								+ userField + " "
-								+ pidAndPpidFields).trim();
-				rules.add(forkVforkCloneExecveRule);
+								+ userField).trim();
+				rules.add(forkVforkCloneExecveUnshareRule);
 
 			// 如果spade.reporter.Audit.config中 syscall=default
 			}else if(systemCallRuleType == SystemCallRuleType.DEFAULT){
@@ -165,11 +170,11 @@ public class AuditControlManager{
 				systemCallsWithSuccess.addAll(Arrays.asList(
 						"unlink", "unlinkat", "link", "linkat", "symlink", "symlinkat",
 						"clone", "fork", "vfork", "execve",
-						"open", "openat", "creat", "mknod", "mknodat",
-						"dup", "dup2", "dup3", "fcntl", "rename", "renameat", "renameat2",
+						"open", "openat", "creat", "mknod", "mknodat", "mkdir",
+						 "rename", "renameat", "renameat2",
 						"setuid", "setreuid", "setresuid", "setgid", "setregid", "setresgid",
 						"chmod", "fchmod", "fchmodat", "mount", "umount2",
-						"pipe", "pipe2", "tee", "splice", "vmsplice", "socketpair",
+						 "tee", "splice", "vmsplice", "socketpair", "socket",
 						"init_module", "finit_module", "ptrace"
 						));
 				if(filesystemCredentialUpdates){
